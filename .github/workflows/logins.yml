@@ -16,24 +16,31 @@ jobs:
 
       - name: Append login data to logins.json
         run: |
-          # Get the username and timestamp from environment variables (passed via GitHub API)
+          # Get the username and timestamp from the GitHub event inputs
           USERNAME="${{ github.event.inputs.username }}"
           TIMESTAMP="${{ github.event.inputs.timestamp }}"
 
           # Create a login entry
           LOGIN_ENTRY="{\"username\": \"$USERNAME\", \"timestamp\": \"$TIMESTAMP\"}"
 
-          # Check if the logins.json file exists, create it if not
+          # Check if the logins.json file exists
           if [ ! -f logins.json ]; then
-            echo "[]" > logins.json
+            echo "[]" > logins.json  # Initialize with an empty array if the file doesn't exist
           fi
 
           # Append the new login entry
           jq ". += [$LOGIN_ENTRY]" logins.json > temp.json && mv temp.json logins.json
 
-      - name: Commit changes
-        uses: EndBug/add-and-commit@v7
-        with:
-          author_name: "GitHub Actions"
-          author_email: "actions@github.com"
-          message: "Log new user login"
+      - name: Set up Git configuration
+        run: |
+          git config user.name "GitHub Actions"
+          git config user.email "actions@github.com"
+
+      - name: Stage and commit changes
+        run: |
+          git add logins.json
+          git commit -m "Log new user login"
+          git push
+
+      - name: Verify the file has been updated
+        run: cat logins.json
