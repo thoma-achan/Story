@@ -1,4 +1,3 @@
-<!-- Updated index.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -115,8 +114,10 @@
     document.getElementById('password-form').addEventListener('submit', async (e) => {
         e.preventDefault();
 
+        const username = document.getElementById('username').value;
         const password = document.getElementById('password').value;
         const message = document.getElementById('message');
+        const timestamp = new Date().toISOString(); // Capture the timestamp
 
         try {
             const response = await fetch('Password.txt');
@@ -126,8 +127,30 @@
             const validPasswords = text.split('\n').map(pw => pw.trim());
 
             if (validPasswords.includes(password)) {
-                localStorage.setItem('authenticated', 'true');
-                window.location.href = 'index_1.html';
+                // Trigger GitHub Action to log the login attempt
+                const actionResponse = await fetch('https://api.github.com/repos/thoma-achan/Story/actions/workflows/logins.yml/dispatches', {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `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`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        ref: 'main',  // or whatever branch you want to trigger from
+                        inputs: {
+                            username: username,
+                            timestamp: timestamp
+                        }
+                    })
+                });
+
+                if (actionResponse.ok) {
+                    message.textContent = 'Login successful!';
+                    message.style.color = 'green';
+                    localStorage.setItem('authenticated', 'true');
+                    window.location.href = 'index_1.html';
+                } else {
+                    throw new Error('Failed to trigger GitHub Action');
+                }
             } else {
                 message.textContent = 'Invalid password.';
                 message.style.color = 'red';
