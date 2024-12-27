@@ -1,0 +1,39 @@
+name: Log User Logins
+
+on:
+  workflow_dispatch:  # Triggered manually or via API request
+
+jobs:
+  log-login:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout the repository
+        uses: actions/checkout@v2
+
+      - name: Set up jq
+        run: sudo apt-get install jq
+
+      - name: Append login data to logins.json
+        run: |
+          # Get the username and timestamp from environment variables (passed via GitHub API)
+          USERNAME="${{ github.event.inputs.username }}"
+          TIMESTAMP="${{ github.event.inputs.timestamp }}"
+
+          # Create a login entry
+          LOGIN_ENTRY="{\"username\": \"$USERNAME\", \"timestamp\": \"$TIMESTAMP\"}"
+
+          # Check if the logins.json file exists, create it if not
+          if [ ! -f logins.json ]; then
+            echo "[]" > logins.json
+          fi
+
+          # Append the new login entry
+          jq ". += [$LOGIN_ENTRY]" logins.json > temp.json && mv temp.json logins.json
+
+      - name: Commit changes
+        uses: EndBug/add-and-commit@v7
+        with:
+          author_name: "GitHub Actions"
+          author_email: "actions@github.com"
+          message: "Log new user login"
