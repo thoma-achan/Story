@@ -1,3 +1,4 @@
+<!-- Updated index.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -114,10 +115,8 @@
     document.getElementById('password-form').addEventListener('submit', async (e) => {
         e.preventDefault();
 
-        const username = document.getElementById('username').value;
         const password = document.getElementById('password').value;
         const message = document.getElementById('message');
-        const timestamp = new Date().toISOString(); // Capture the timestamp
 
         try {
             const response = await fetch('Password.txt');
@@ -127,30 +126,8 @@
             const validPasswords = text.split('\n').map(pw => pw.trim());
 
             if (validPasswords.includes(password)) {
-                // Trigger GitHub Action to log the login attempt
-                const actionResponse = await fetch('https://api.github.com/repos/thoma-achan/Story/actions/workflows/logins.yml/dispatches', {
-                    method: 'POST',
-                    headers: {
-                        'Authorization': `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`,
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        ref: 'main',  // or whatever branch you want to trigger from
-                        inputs: {
-                            username: username,
-                            timestamp: timestamp
-                        }
-                    })
-                });
-
-                if (actionResponse.ok) {
-                    message.textContent = 'Login successful!';
-                    message.style.color = 'green';
-                    localStorage.setItem('authenticated', 'true');
-                    window.location.href = 'index_1.html';
-                } else {
-                    throw new Error('Failed to trigger GitHub Action');
-                }
+                localStorage.setItem('authenticated', 'true');
+                window.location.href = 'index_1.html';
             } else {
                 message.textContent = 'Invalid password.';
                 message.style.color = 'red';
