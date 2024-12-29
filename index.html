@@ -128,7 +128,7 @@
                 localStorage.setItem('admin', 'true');
                 window.location.href = 'index_1.html';
             }
-            if (validPasswords.includes(password)) {
+            else if (validPasswords.includes(password)) {
                 localStorage.setItem('authenticated', 'true');
                 window.location.href = 'index_1.html';
             } else {
