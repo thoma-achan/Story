@@ -326,9 +326,7 @@
                     </div>
                     <div class="col-md-6 text-center text-md-end text-white">
 			 <p id="ip-address">Fetching your IP address...</p>
-			 <p id="username"></p>
-  			    
-  			    <script>
+			    <script>
 			        // Fetch IP address from the API
 			        fetch('https://api.ipify.org?format=json')
 			            .then(response => response.json())
@@ -343,11 +341,12 @@
 			                document.getElementById('ip-address').textContent = "Unable to fetch IP address.";
 			                console.error('Error fetching IP:', error);
 			            });
-				// Display the username within id "username"
-	        		Var username = localStorage.getItem('role');
-			        document.getElementById('username').textContent = username;
+			     </script>
+  			 <p id="username"></p>
+  			    <script>
+ 				Var username = localStorage.getItem('role');
+			        document.getElementById('username').textContent ="Hi"+username;
 			   </script>
-			    
                        </div>
                 </div>
             </div>
