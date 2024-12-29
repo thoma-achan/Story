@@ -29,7 +29,7 @@
         <link href="css/style.css" rel="stylesheet">
  <script>
        function checkAuthentication() {
-            if (localStorage.getItem('authenticated') !== 'true' || localStorage.getItem('admin') !== 'true') {
+            if (localStorage.getItem('authenticated') !== 'true') {
                 window.location.href = 'index.html';
             }
         }
@@ -323,7 +323,30 @@
                         <span class="text-light"></span>
                     </div>
                     <div class="col-md-6 text-center text-md-end text-white">
-			    Admin
+			 <p id="ip-address">Fetching your IP address...</p>
+  
+    <script>
+        // Fetch IP address from the API
+        fetch('https://api.ipify.org?format=json')
+            .then(response => response.json())
+            .then(data => {
+                const currentIP = data.ip;
+
+                // Display the current IP
+                document.getElementById('ip-address').textContent = `Your IP Address is: ${currentIP}`;
+
+               })
+            .catch(error => {
+                document.getElementById('ip-address').textContent = "Unable to fetch IP address.";
+                console.error('Error fetching IP:', error);
+            });
+
+        // Display last stored IP from localStorage on page load
+        const lastStoredIP = localStorage.getItem('lastIP');
+        if (lastStoredIP) {
+            document.getElementById('last-ip').textContent = `Last Stored IP Address: ${lastStoredIP}`;
+        }
+    </script>
                        </div>
                 </div>
             </div>
