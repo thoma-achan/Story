@@ -120,7 +120,7 @@
         <div class="container-fluid story position-relative py-5" id="weddingStory">
 	    <div class="container position-relative py-5">
                 <div class="mx-auto text-center mb-5 wow fadeInUp" data-wow-delay="0.1s" style="max-width: 800;">
-                    <h1 class="text-primary display-1">Hello!</h1>
+                    <h1 class="text-primary display-1"><span id="username"></span>Hello!</h1>
                 </div>
              </div>
             <div class="position-absolute" style="top: -35px; right: 0;">
@@ -345,7 +345,7 @@
   			 <p><span id="username"></span></p>
   			    <script>
  				var username = localStorage.getItem('role');
-                                document.getElementById('username').textContent = "Hi " + username;
+                                document.getElementById('username').textContent = "Hello" + username + "!";
 			   </script>
                        </div>
                 </div>
