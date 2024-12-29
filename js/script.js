@@ -41,7 +41,7 @@
 
 
 
-const galleryData = [
+			const galleryData = [
 				    { imgSrc: "img/gallery-1.jpg", date: "10/01/2022", description: "First Meeting" },
 				    { imgSrc: "img/gallery-2.jpg", date: "14/10/2022", description: "First Lip lock" },
 				    { imgSrc: "img/gallery-3.jpg", date: "22/01/2022", description: "Same Mind" },
