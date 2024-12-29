@@ -7,12 +7,13 @@
     <link rel="icon" href="img/title1.png" type="image/png">
 
     <!-- Firebase App -->
-    <script src="https://www.gstatic.com/firebasejs/11.1.0/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/11.1.0/firebase-auth.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/11.1.0/firebase-firestore.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/11.1.0/firebase-functions.js"></script>
-    <link href="css/style1.css" rel="stylesheet"> 
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-functions.js"></script>
     
+    <!-- Link to external CSS -->
+    <link href="css/style1.css" rel="stylesheet">
 </head>
 <body>
 <div class="container">
@@ -32,12 +33,9 @@
     <div id="loading" style="display:none;">Loading...</div>
 </div>
 
+<!-- Firebase App and Script -->
 <script>
     // Firebase initialization
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-app.js";
-    import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-analytics.js";
-    import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-firestore.js";
-
     const firebaseConfig = {
         apiKey: "AIzaSyBtmVd-KCtciFxTMBW2I7ciTAAqc5bL1jU",
         authDomain: "our-story-fef22.firebaseapp.com",
@@ -47,10 +45,12 @@
         appId: "1:608837980314:web:7e7c11f3e4359ccb7e4f23",
         measurementId: "G-Z63NW2LJRZ"
     };
-    const app = initializeApp(firebaseConfig);
-    const analytics = getAnalytics(app);
-    const db = getFirestore(app);
 
+    // Initialize Firebase
+    const app = firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+    const auth = firebase.auth();
+    
     document.getElementById('password-form').addEventListener('submit', async (e) => {
         e.preventDefault();
         
@@ -102,8 +102,8 @@
 
     // Function to save data to Firestore
     function saveData(username) {
-        const usersRef = collection(db, "users");
-        addDoc(usersRef, { username: username })
+        const usersRef = db.collection("users");
+        usersRef.add({ username: username })
             .then((docRef) => {
                 console.log("Document written with ID: " + docRef.id);
             })
