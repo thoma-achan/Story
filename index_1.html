@@ -26,30 +26,7 @@
         <link href="css/bootstrap.min.css" rel="stylesheet">
 
         <!-- Template Stylesheet -->
-        <link href="css/style.css" rel="stylesheet">
- <script>
-       function checkAuthentication() {
-            if (localStorage.getItem('authenticated') !== 'true') {
-                window.location.href = 'index.html';
-            }
-        }
-
-        function logoutOrRedirect() {
-            if (localStorage.getItem('role') !== 'admin') {
-		localStorage.removeItem('authenticated');
-                window.location.href = 'index.html';
-            }
-        }
-
-        document.addEventListener('DOMContentLoaded', () => {
-            checkAuthentication();
-
-            // Automatically log out or redirect after 5 seconds (for demo purposes, adjust as needed)
-            setTimeout(logoutOrRedirect, 60000);
-        });
-    </script>
-
-   
+        <link href="css/style.css" rel="stylesheet"> 
 </head>
 <body data-bs-spy="scroll" data-bs-target="#navBar" id="weddingHome">
     <div>
@@ -326,27 +303,7 @@
                     </div>
                     <div class="col-md-6 text-center text-md-end text-white">
 			 <p id="ip-address">Fetching your IP address...</p>
-			    <script>
-			        // Fetch IP address from the API
-			        fetch('https://api.ipify.org?format=json')
-			            .then(response => response.json())
-			            .then(data => {
-			                const currentIP = data.ip;
-			
-			                // Display the current IP
-			                document.getElementById('ip-address').textContent = `Your IP Address is: ${currentIP}`;
-			
-			               })
-			            .catch(error => {
-			                document.getElementById('ip-address').textContent = "Unable to fetch IP address.";
-			                console.error('Error fetching IP:', error);
-			            });
-			     </script>
-  			 <p><span id="username"></span></p>
-  			    <script>
- 				var username = localStorage.getItem('role');
-                                document.getElementById('username').textContent = "Hello " + username + " ! ";
-			   </script>
+			    
                        </div>
                 </div>
             </div>
