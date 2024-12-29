@@ -326,29 +326,28 @@
                     </div>
                     <div class="col-md-6 text-center text-md-end text-white">
 			 <p id="ip-address">Fetching your IP address...</p>
-  
-    <script>
-        // Fetch IP address from the API
-        fetch('https://api.ipify.org?format=json')
-            .then(response => response.json())
-            .then(data => {
-                const currentIP = data.ip;
-
-                // Display the current IP
-                document.getElementById('ip-address').textContent = `Your IP Address is: ${currentIP}`;
-
-               })
-            .catch(error => {
-                document.getElementById('ip-address').textContent = "Unable to fetch IP address.";
-                console.error('Error fetching IP:', error);
-            });
-
-        // Display last stored IP from localStorage on page load
-        const lastStoredIP = localStorage.getItem('lastIP');
-        if (lastStoredIP) {
-            document.getElementById('last-ip').textContent = `Last Stored IP Address: ${lastStoredIP}`;
-        }
-    </script>
+			 <p id="Username"></p>
+  			    
+  			    <script>
+			        // Fetch IP address from the API
+			        fetch('https://api.ipify.org?format=json')
+			            .then(response => response.json())
+			            .then(data => {
+			                const currentIP = data.ip;
+			
+			                // Display the current IP
+			                document.getElementById('ip-address').textContent = `Your IP Address is: ${currentIP}`;
+			
+			               })
+			            .catch(error => {
+			                document.getElementById('ip-address').textContent = "Unable to fetch IP address.";
+			                console.error('Error fetching IP:', error);
+			            });
+				// Display the username within id "username"
+	        		Var username = localStorage.getItem('role');
+			        document.getElementById('username').textContent = username;
+			   </script>
+			    
                        </div>
                 </div>
             </div>
