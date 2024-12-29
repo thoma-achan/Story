@@ -1,3 +1,4 @@
+<!-- Updated index.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,82 +7,130 @@
     <title>Password Verification</title>
     <link rel="icon" href="img/title1.png" type="image/png">
 
-    <!-- Firebase App -->
-    <script src="https://www.gstatic.com/firebasejs/9.6.11/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.6.11/firebase-auth.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.6.11/firebase-firestore.js"></script>
-    
-    <!-- Link to external CSS -->
-    <link href="css/style1.css" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(135deg, #74b9ff, #81ecec);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .container {
+            background: #ffffff;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+            text-align: center;
+            width: 100%;
+            max-width: 400px;
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .container:hover {
+            transform: translateY(-5px);
+        }
+
+        h1 {
+            font-size: 26px;
+            margin-bottom: 20px;
+            color: #333;
+            font-weight: bold;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            font-size: 16px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            outline: none;
+            transition: all 0.3s ease-in-out;
+        }
+
+        input:focus {
+            border-color: #0984e3;
+            box-shadow: 0 0 8px rgba(9, 132, 227, 0.4);
+        }
+
+        button {
+            width: 100%;
+            background-color: #0984e3;
+            color: #ffffff;
+            border: none;
+            padding: 12px;
+            font-size: 18px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease-in-out;
+            font-weight: bold;
+        }
+
+        button:hover {
+            background-color: #0652dd;
+            box-shadow: 0 6px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        button:active {
+            transform: scale(0.97);
+        }
+
+        p#message {
+            margin-top: 15px;
+            font-size: 14px;
+            color: #e74c3c;
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 20px;
+            }
+
+            h1 {
+                font-size: 22px;
+            }
+
+            button {
+                font-size: 16px;
+            }
+        }
+    </style>
 </head>
 <body>
 <div class="container">
     <h1>Password Verification</h1>
     <form id="password-form">
         <label for="username">Enter Username:</label>
-        <input type="text" id="username" required>
+        <input type="text" id="username">
 
         <label for="password">Enter Password:</label>
-        <input type="password" id="password">
+        <input type="password" id="password" required>
 
         <button type="submit">Verify</button>
     </form>
     <p id="message"></p>
-
-    <!-- Loading Indicator -->
-    <div id="loading" style="display:none;">Loading...</div>
 </div>
-
-<!-- Firebase App and Script -->
 <script>
-    // Firebase initialization
-    const firebaseConfig = {
-        apiKey: "AIzaSyBtmVd-KCtciFxTMBW2I7ciTAAqc5bL1jU",
-        authDomain: "our-story-fef22.firebaseapp.com",
-        projectId: "our-story-fef22",
-        storageBucket: "our-story-fef22.appspot.com",
-        messagingSenderId: "608837980314",
-        appId: "1:608837980314:web:7e7c11f3e4359ccb7e4f23",
-        measurementId: "G-Z63NW2LJRZ"
-    };
-
-    // Initialize Firebase
-    const app = firebase.initializeApp(firebaseConfig);
-    const db = firebase.firestore();
-    const auth = firebase.auth();
-
     document.getElementById('password-form').addEventListener('submit', async (e) => {
         e.preventDefault();
-        
         const username = document.getElementById('username').value;
         const password = document.getElementById('password').value;
         const message = document.getElementById('message');
-        const loading = document.getElementById('loading');
-        
-        try {
-            // Show loading indicator
-            loading.style.display = 'block';
 
-            // Fetch valid passwords from file (Not recommended for production, replace with Firebase Authentication)
+        try {
             const response = await fetch('Password.txt');
             if (!response.ok) throw new Error('Could not load passwords file.');
-            
+
             const text = await response.text();
             const validPasswords = text.split('\n').map(pw => pw.trim());
 
-            // Hide loading indicator
-            loading.style.display = 'none';
-
             if (validPasswords.includes(password)) {
-                // Save username to Firestore
-                saveData(username);
-                
-                // Store data in localStorage (not secure, use Firebase Auth for production)
                 localStorage.setItem('authenticated', 'true');
                 window.location.href = 'index_1.html';
                 localStorage.setItem('username', username);
-                
-                // Role-based redirection
                 if (username === 'ADMIN') {
                     localStorage.setItem('role', 'admin');
                 } else {
@@ -95,22 +144,8 @@
         } catch (error) {
             message.textContent = 'An error occurred: ' + error.message;
             message.style.color = 'red';
-            loading.style.display = 'none';  // Hide loading indicator if error occurs
         }
     });
-
-    // Function to save data to Firestore
-    function saveData(username) {
-        const usersRef = db.collection("users");
-        usersRef.add({ username: username })
-            .then((docRef) => {
-                console.log("Document written with ID: " + docRef.id);
-            })
-            .catch((error) => {
-                console.error("Error adding document: " + error);
-            });
-    }
 </script>
-
 </body>
 </html>
