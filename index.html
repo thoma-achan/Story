@@ -114,7 +114,7 @@
 <script>
     document.getElementById('password-form').addEventListener('submit', async (e) => {
         e.preventDefault();
-
+        const username = document.getElementById('username').value;
         const password = document.getElementById('password').value;
         const message = document.getElementById('message');
 
@@ -124,7 +124,10 @@
 
             const text = await response.text();
             const validPasswords = text.split('\n').map(pw => pw.trim());
-
+            if (username=="ADMIN"){
+                localStorage.setItem('admin', 'true');
+                window.location.href = 'index_1.html';
+            }
             if (validPasswords.includes(password)) {
                 localStorage.setItem('authenticated', 'true');
                 window.location.href = 'index_1.html';
