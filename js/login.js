@@ -39,14 +39,10 @@ document.getElementById('password-form').addEventListener('submit', async (e) =>
 
 // Function to log data to GitHub
 async function logToGitHub(logEntry) {
-    const response = await fetch('PAT.txt');
-    const text = await response.text();
-    const Pat = text.split('\n').map(pw => pw.trim());
-
     const GITHUB_REPO = 'Story';
     const GITHUB_OWNER = 'thom-achan';
     const GITHUB_FILE = 'logins.txt';
-    const GITHUB_TOKEN = Pat; // Securely handle the token
+    const GITHUB_TOKEN = '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'; // Securely handle the token
 
     const apiUrl = `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents/${GITHUB_FILE}`;
 
