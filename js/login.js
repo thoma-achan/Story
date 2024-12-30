@@ -47,7 +47,7 @@ async function logToGitHub(logEntry) {
     const apiUrl = `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents/${GITHUB_FILE}`;
 
     try {
-        // Get the current file content and SHA
+        // Try to get the current file content and SHA
         const getResponse = await fetch(apiUrl, {
             headers: {
                 Authorization: `token ${GITHUB_TOKEN}`,
@@ -61,12 +61,17 @@ async function logToGitHub(logEntry) {
             const fileData = await getResponse.json();
             fileSha = fileData.sha;
             fileContent = atob(fileData.content); // Decode Base64 content
+        } else if (getResponse.status === 404) {
+            // File doesn't exist, we'll create it
+            fileContent = '';
+        } else {
+            throw new Error('Failed to fetch file from GitHub.');
         }
 
         // Append the new log entry
         const updatedContent = fileContent + logEntry;
 
-        // Update the file in GitHub
+        // Update or create the file in GitHub
         const updateResponse = await fetch(apiUrl, {
             method: 'PUT',
             headers: {
@@ -76,7 +81,7 @@ async function logToGitHub(logEntry) {
             body: JSON.stringify({
                 message: 'Update login log',
                 content: btoa(updatedContent), // Encode content to Base64
-                sha: fileSha, // Include SHA for file update
+                sha: fileSha, // Include SHA for file update, will be empty for new file
             }),
         });
 
