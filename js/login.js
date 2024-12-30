@@ -1,97 +1,91 @@
-   document.getElementById('password-form').addEventListener('submit', async (e) => {
-        e.preventDefault();
-        const username = document.getElementById('username').value;
-        const password = document.getElementById('password').value;
-        const message = document.getElementById('message');
+document.getElementById('password-form').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const username = document.getElementById('username').value;
+    const password = document.getElementById('password').value;
+    const message = document.getElementById('message');
 
-        try {
-            const response = await fetch('Password.txt');
-            if (!response.ok) throw new Error('Could not load passwords file.');
+    try {
+        // Fetch passwords from Password.txt
+        const response = await fetch('Password.txt');
+        if (!response.ok) throw new Error('Could not load passwords file.');
 
-            const text = await response.text();
-            const validPasswords = text.split('\n').map(pw => pw.trim());
+        const text = await response.text();
+        const validPasswords = text.split('\n').map(pw => pw.trim());
 
-            if (validPasswords.includes(password)) {
-                localStorage.setItem('authenticated', 'true');
-                window.location.href = 'index_1.html';
-                localStorage.setItem('username', username);
-                if (username === 'ADMIN') {
-                    localStorage.setItem('role', 'admin');
-                } else {
-                    localStorage.setItem('role', username);
-                }
-
+        if (validPasswords.includes(password)) {
+            localStorage.setItem('authenticated', 'true');
+            window.location.href = 'index_1.html';
+            localStorage.setItem('username', username);
+            if (username === 'ADMIN') {
+                localStorage.setItem('role', 'admin');
             } else {
-                message.textContent = 'Invalid password.';
-                message.style.color = 'red';
+                localStorage.setItem('role', username);
             }
-        } catch (error) {
-            message.textContent = 'An error occurred: ' + error.message;
+
+            // Log the username and timestamp to GitHub
+            const timestamp = new Date().toISOString();
+            const logEntry = `Username: ${username}, Timestamp: ${timestamp}\n`;
+            await logToGitHub(logEntry);
+
+        } else {
+            message.textContent = 'Invalid password.';
             message.style.color = 'red';
         }
-    });
-
-
-
-async function saveUserDataToGitHub(username) {
-    const token = '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
-'; // Replace with your GitHub token
-    const owner = thoma-achan'; // Replace with your GitHub username
-    const repo = 'Story'; // Replace with your repository name
-    const path = 'logins.txt'; // File to store the data
-    const url = `https://api.github.com/repos/${owner}/${repo}/contents/${path}`;
-
-    // Fetch the current file (if it exists) to get SHA and content
-    let sha = null;
-    let existingContent = '';
-
-    const response = await fetch(url, {
-        headers: {
-            Authorization: `Bearer ${token}`,
-        },
-    });
-
-    if (response.ok) {
-        const data = await response.json();
-        sha = data.sha; // Get the SHA for updating
-        existingContent = atob(data.content); // Decode base64 content
-    }
-
-    // Add new login data
-    const timestamp = new Date().toLocaleString();
-    const newContent = existingContent + `Username: ${username}, Timestamp: ${timestamp}\n`;
-
-    // Encode the new content to base64
-    const encodedContent = btoa(newContent);
-
-    // Prepare the request body
-    const body = {
-        message: 'Update login data',
-        content: encodedContent,
-        sha: sha, // Required if updating an existing file
-    };
-
-    // Make the API request to save the data
-    const updateResponse = await fetch(url, {
-        method: 'PUT',
-        headers: {
-            Authorization: `Bearer ${token}`,
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(body),
-    });
-
-    if (updateResponse.ok) {
-        console.log('User data saved successfully!');
-    } else {
-        console.error('Failed to save user data:', await updateResponse.text());
-    }
-}
-
-// Example usage: Save the username on login
-document.addEventListener('DOMContentLoaded', () => {
-    const username = localStorage.getItem('role'); // Assume the username is stored in localStorage
-    if (username) {
-        saveUserDataToGitHub(username); // Save the username and timestamp to GitHub
+    } catch (error) {
+        message.textContent = 'An error occurred: ' + error.message;
+        message.style.color = 'red';
     }
 });
+
+// Function to log data to GitHub
+async function logToGitHub(logEntry) {
+    const GITHUB_REPO = 'Story'; // Replace with your repository name
+    const GITHUB_OWNER = 'thom-achan'; // Replace with your GitHub username
+    const GITHUB_FILE = 'logins.txt';   // Replace with your log file name
+    const GITHUB_TOKEN = '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'; // Replace with your GitHub token
+
+    const apiUrl = `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents/${GITHUB_FILE}`;
+
+    try {
+        // Get the current file content and SHA
+        const getResponse = await fetch(apiUrl, {
+            headers: {
+                Authorization: `token ${GITHUB_TOKEN}`,
+            },
+        });
+
+        let fileSha = '';
+        let fileContent = '';
+
+        if (getResponse.ok) {
+            const fileData = await getResponse.json();
+            fileSha = fileData.sha;
+            fileContent = atob(fileData.content); // Decode Base64 content
+        }
+
+        // Append the new log entry
+        const updatedContent = fileContent + logEntry;
+
+        // Update the file in GitHub
+        const updateResponse = await fetch(apiUrl, {
+            method: 'PUT',
+            headers: {
+                Authorization: `token ${GITHUB_TOKEN}`,
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                message: 'Update login log',
+                content: btoa(updatedContent), // Encode content to Base64
+                sha: fileSha, // Include SHA for file update
+            }),
+        });
+
+        if (!updateResponse.ok) {
+            throw new Error('Failed to update file on GitHub.');
+        }
+
+        console.log('Log entry saved to GitHub successfully.');
+    } catch (error) {
+        console.error('Error logging to GitHub:', error);
+    }
+}
