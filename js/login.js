@@ -13,14 +13,13 @@
 
             if (validPasswords.includes(password)) {
                 localStorage.setItem('authenticated', 'true');
-                window.location.href = 'index_1.html';
                 localStorage.setItem('username', username);
                 if (username === 'ADMIN') {
                     localStorage.setItem('role', 'admin');
                 } else {
                     localStorage.setItem('role', username);
                 }
-
+               window.location.href = 'index_1.html';
             } else {
                 message.textContent = 'Invalid password.';
                 message.style.color = 'red';
