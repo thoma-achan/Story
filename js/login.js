@@ -2,7 +2,7 @@
 
 
 async function saveUserDataToGitHub(username) {
-    const token = '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
+    const token = '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
 '; // Replace with your GitHub token
     const owner = thoma-achan'; // Replace with your GitHub username
     const repo = 'Story'; // Replace with your repository name
