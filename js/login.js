@@ -42,7 +42,7 @@ async function logToGitHub(logEntry) {
     const GITHUB_REPO = 'Story';
     const GITHUB_OWNER = 'thom-achan';
     const GITHUB_FILE = 'logins.txt';
-    const GITHUB_TOKEN = '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'; // Securely handle the token
+    const GITHUB_TOKEN = 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'; // Securely handle the token
 
     const apiUrl = `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents/${GITHUB_FILE}`;
 
