@@ -34,3 +34,28 @@
           });
 	var username = localStorage.getItem('role');
         document.getElementById('username').textContent = "Hello " + username + " ! ";
+
+
+
+
+
+ // Check if the role in localStorage is "Admin"
+    if (localStorage.getItem('role') === 'Admin') {
+      // Create a logout button
+      const logoutButton = document.createElement('button');
+      logoutButton.textContent = 'Logout';
+      logoutButton.id = 'logout-btn';
+
+      // Append the button to the container
+      document.getElementById('lgout').appendChild(logoutButton);
+
+      // Add event listener for logout functionality
+      logoutButton.addEventListener('click', () => {
+        // Clear user-related data from localStorage
+        localStorage.removeItem('role');
+	localStorage.removeItem('authenticated');
+        alert('You have been logged out!');
+        // Redirect to a login or home page (optional)
+        window.location.href = 'index.html';      
+      });
+    }
