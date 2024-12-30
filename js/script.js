@@ -40,7 +40,7 @@
 
 
  // Check if the role in localStorage is "Admin"
-    if (localStorage.getItem('role') === 'Admin') {
+    if (localStorage.getItem('role') === 'admin') {
       // Create a logout button
       const logoutButton = document.createElement('button');
       logoutButton.textContent = 'Logout';
