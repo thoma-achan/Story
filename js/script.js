@@ -20,18 +20,16 @@
 
 
         // Fetch IP address from the API
-        fetch('curl "ipinfo.io/152.59.223.67?token=b8ef37ae6d96aa"')
-        .then(response => response.json())
-        .then(data => {
-         const currentIP = data.ip;
-	
-         // Display the current IP
-         document.getElementById('ip-address').textContent = `Your IP Address is: ${currentIP}`;
-         })
-         .catch(error => {
-             document.getElementById('ip-address').textContent = "Unable to fetch IP address.";
-             console.error('Error fetching IP:', error);
-          });
+        fetch('https://ipinfo.io/json?token=YOUR_TOKEN_HERE')
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('ip-address').innerText = `Your IP Address is: ${data.ip}`;
+            })
+            .catch(error => {
+                console.error('Error fetching IP address:', error);
+                document.getElementById('ip-address').innerText = 'Unable to fetch IP address.';
+            });
+
 	var username = localStorage.getItem('role');
         document.getElementById('username').textContent = "Hello " + username + " ! ";
 
