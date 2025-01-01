@@ -20,7 +20,7 @@
 
 
         // Fetch IP address from the API
-        fetch('https://ipinfo.io/json?token=b8ef37ae6d96aa')
+	fetch('https://api.ipify.org?format=json')
             .then(response => response.json())
             .then(data => {
                 document.getElementById('ip-address').innerText = `Your IP Address is: ${data.ip}`;
@@ -29,7 +29,6 @@
                 console.error('Error fetching IP address:', error);
                 document.getElementById('ip-address').innerText = 'Unable to fetch IP address.';
             });
-
 	var username = localStorage.getItem('role');
         document.getElementById('username').textContent = "Hello " + username + " ! ";
 
