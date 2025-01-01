@@ -20,7 +20,7 @@
 
 
         // Fetch IP address from the API
-        fetch('https://ipinfo.io/json?token=YOUR_TOKEN_HERE')
+        fetch('https://ipinfo.io/json?token=b8ef37ae6d96aa')
             .then(response => response.json())
             .then(data => {
                 document.getElementById('ip-address').innerText = `Your IP Address is: ${data.ip}`;
