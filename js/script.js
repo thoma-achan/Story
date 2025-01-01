@@ -20,7 +20,7 @@
 
 
         // Fetch IP address from the API
-        fetch('https://api.ipify.org?format=json')
+        fetch('curl "ipinfo.io/152.59.223.67?token=b8ef37ae6d96aa"')
         .then(response => response.json())
         .then(data => {
          const currentIP = data.ip;
