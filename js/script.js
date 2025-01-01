@@ -20,7 +20,7 @@
 
 
         // Fetch IP address from the API
-	fetch('https://api.ipify.org?format=json')
+	fetch('https://ipwhois.app/json/')
             .then(response => response.json())
             .then(data => {
                 document.getElementById('ip-address').innerText = `Your IP Address is: ${data.ip}`;
