@@ -30,15 +30,3 @@
     });
 
 
- fetch('https://api.ipify.org?format=json')
-        .then(response => response.json())
-        .then(data => {
-         const currentIP = data.ip;
-	
-         // Display the current IP
-         document.getElementById('ip-address').textContent = `Your IP Address is: ${currentIP}`;
-         })
-         .catch(error => {
-             document.getElementById('ip-address').textContent = "Unable to fetch IP address.";
-             console.error('Error fetching IP:', error);
- });
